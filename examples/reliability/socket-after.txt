@@ -1,0 +1,22 @@
+Running main() from ${BUILD}/_deps/gtest-src/googletest/src/gtest_main.cc
+[==========] Running 5 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 1 test from IOUtil
+[ RUN      ] IOUtil.MatchListeningIP
+[       OK ] IOUtil.MatchListeningIP (0 ms)
+[----------] 1 test from IOUtil (1 ms total)
+
+[----------] 4 tests from IOUtilSocketTest
+[ RUN      ] IOUtilSocketTest.SendWithTimeoutHonorsDeadlineOnBlockingSocket
+[       OK ] IOUtilSocketTest.SendWithTimeoutHonorsDeadlineOnBlockingSocket (102 ms)
+[ RUN      ] IOUtilSocketTest.SendWithTimeoutSendsDataAndPreservesSocketFlags
+[       OK ] IOUtilSocketTest.SendWithTimeoutSendsDataAndPreservesSocketFlags (0 ms)
+[ RUN      ] IOUtilSocketTest.SendWithTimeoutKeepsDeadlineAfterInterruptedPoll
+[       OK ] IOUtilSocketTest.SendWithTimeoutKeepsDeadlineAfterInterruptedPoll (201 ms)
+[ RUN      ] IOUtilSocketTest.SendWithTimeoutCompletesPartialWritesToSlowReader
+[       OK ] IOUtilSocketTest.SendWithTimeoutCompletesPartialWritesToSlowReader (174 ms)
+[----------] 4 tests from IOUtilSocketTest (483 ms total)
+
+[----------] Global test environment tear-down
+[==========] 5 tests from 2 test suites ran. (490 ms total)
+[  PASSED  ] 5 tests.

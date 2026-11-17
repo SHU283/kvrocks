@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "evidence_from": "One completed run of tools/reliability/run.py in the publication checkout",
+  "upstream_commit": "baa1da67f2ef94ffd62823116537ab7e95e7d5ba",
+  "source_fix_commit": "871a0ac65fd01d033b0059c28942986f60f9f8c2",
+  "environment_observed": {
+    "distribution": "Ubuntu 24.04.3 LTS",
+    "kernel": "6.6.87.2-microsoft-standard-WSL2",
+    "architecture": "x86_64",
+    "python": "3.12.3",
+    "gcc": "13.3.0",
+    "clang": "18.1.3",
+    "clang_format": "18.1.3",
+    "clang_tidy": "18.1.3",
+    "kvrocks_version_output": "kvrocks unstable (commit 7ecd365)"
+  },
+  "redactions": [
+    "checkout path",
+    "test output root",
+    "original build/source paths",
+    "temporary socket build directory"
+  ],
+  "retained": [
+    "all JSON result fields and numbers",
+    "timestamps",
+    "loopback addresses and ephemeral test ports",
+    "process IDs",
+    "binary and source SHA-256 hashes",
+    "expected failing baseline test"
+  ],
+  "excluded": [
+    "database files",
+    "executables",
+    "dependency cache",
+    "full build logs",
+    "unrelated C++ success output"
+  ],
+  "build_limit": "Existing full binaries were reused after source/compile-command/mtime/hash consistency checks. This run freshly compiled only the small before/after socket executables. The existing database binary may identify the old local snapshot import in its version string; that marker is not an official upstream revision or the publication branch.",
+  "script_sha256": {
+    "tools/reliability/build_identity.py": "f4e440a3026fc0fe48cc90bde6681620d7a80ac1e969dd57fd56f499a6b11e6b",
+    "tools/reliability/reproduce_socket.py": "9e0da8c30ee6d67a801b774b49f51c3765488d51020c420594b2fa8adf6118ba",
+    "tools/reliability/run.py": "ee05f37fb4e43804ce22c78a8236fb1712126705eda32c90e09d6996acf8eee2",
+    "tools/reliability/run_backpressure_lab.py": "165b74cb21b8deca11373447dd05b991c44e6327a84692c2c178e5a9a11ee8ac",
+    "tools/reliability/run_replication_lab.py": "bff3abe2883a29233ad023dfe0a4255249bbc7874c3f47546312d2d2af006374",
+    "tools/reliability/socket-tests/CMakeLists.txt": "7271ac91859724af1232cf99006614a6a9c56c751a43c7b87b2c4bb0c6f392bb"
+  },
+  "files": [
+    {
+      "artifact": "validation.json",
+      "input_relative_to_run": "result.json",
+      "original_sha256": "b37e5b6841eaab808aaac2c4c2b39593f5802aa644e9cfb7cd25e22062de5f54",
+      "published_sha256": "e1c52c7e2b5caa8a01012db0ab29cd27c42a902443604f82445e3243495e3910",
+      "excerpt": false
+    },
+    {
+      "artifact": "replication.json",
+      "input_relative_to_run": "replication/replication-1eizcafm/result.json",
+      "original_sha256": "f9738368beb749b0ab60881925262e4034b220e02e2aabcfc3422fb8c6cf6020",
+      "published_sha256": "7ea487d4cc97007fa099115dfb223b12e8fa49d07a48ced904b2a065126dfd5d",
+      "excerpt": false
+    },
+    {
+      "artifact": "backpressure.json",
+      "input_relative_to_run": "backpressure/backpressure-ac_vje7r/result.json",
+      "original_sha256": "8ede3372e6ca830668a654dcc277e385d106977acc69a5ec414f2192b110d76f",
+      "published_sha256": "0850ac67c26bc3c499799340e56547ebf2691c216dee1894088faec59723d3f5",
+      "excerpt": false
+    },
+    {
+      "artifact": "socket-control.json",
+      "input_relative_to_run": "socket-reproduction/socket-wxlnu_27/result.json",
+      "original_sha256": "5c7772084255bb959332b5cfd0d13b171e784f5d82c5f42df7992244a3c40964",
+      "published_sha256": "1a3cb20d019d8f8c065aac286e6adb45015a5233b284c1af560b3fc1bf9fc423",
+      "excerpt": false
+    },
+    {
+      "artifact": "socket-before.txt",
+      "input_relative_to_run": "socket-reproduction/socket-wxlnu_27/before.log",
+      "original_sha256": "8072663f3d64889b0eeee02e5ac482d1b04d55675ecd4cf4e4f223facbfb6d99",
+      "published_sha256": "98bf73780f3dc413fc87f33fa192077b930e799b75b8027514dcc3eb506b8229",
+      "excerpt": false
+    },
+    {
+      "artifact": "socket-after.txt",
+      "input_relative_to_run": "socket-reproduction/socket-wxlnu_27/after.log",
+      "original_sha256": "de5994b3af49775d9eb19a7645e3c4b0ef9bdad21496ce0b2714353cbcb4b8a4",
+      "published_sha256": "a61eeeca203eea7049f694e0eaefb7e57b66a348cc10a36f0dff609886e4e98d",
+      "excerpt": false
+    },
+    {
+      "artifact": "cpp-tests.excerpt.txt",
+      "input_relative_to_run": "cpp_tests.log",
+      "original_sha256": "7205954af5b3ca48c5b9f82e22117c08b6690daa58c65c89c1d558275475176a",
+      "published_sha256": "47af6daf64f20ef3819486475993828b7dc61fcca0d564a380c29f8a899da15c",
+      "excerpt": true
+    },
+    {
+      "artifact": "availability.jsonl",
+      "input_relative_to_run": "backpressure/backpressure-ac_vje7r/availability.jsonl",
+      "original_sha256": "806936c1792d2f6532f81e9bf3537636d567fa270dec40598b3917e31beb0c90",
+      "published_sha256": "806936c1792d2f6532f81e9bf3537636d567fa270dec40598b3917e31beb0c90",
+      "excerpt": false
+    }
+  ]
+}

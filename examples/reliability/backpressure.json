@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "started_at_utc": "2026-11-17T13:29:34.311666+00:00",
+  "status": "passed",
+  "binary": "${BUILD}/kvrocks",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "run_directory": "${RUN}/backpressure/backpressure-ac_vje7r",
+  "configuration": {
+    "payload_mib": 32,
+    "value_bytes": 262144,
+    "payload_seed": 20261111,
+    "send_timeout_ms": 1000,
+    "max_replication_lag": 0,
+    "wal_sync": true,
+    "replication": "asynchronous",
+    "workers_per_node": 2,
+    "wait_timeout_seconds": 60,
+    "total_timeout_seconds": 180
+  },
+  "scope": "Real loopback replication with a SIGSTOP peer; no performance or production availability guarantee",
+  "steps": [
+    {
+      "name": "initial_replication",
+      "status": "passed",
+      "target_offset": 3,
+      "replica_info": {
+        "role": "slave",
+        "master_host": "127.0.0.1",
+        "master_port": "38053",
+        "master_link_status": "up",
+        "master_sync_unrecoverable_error": "no",
+        "master_sync_in_progress": "0",
+        "master_last_io_seconds_ago": "1",
+        "slave_repl_offset": "3",
+        "slave_priority": "100",
+        "connected_slaves": "0",
+        "master_repl_offset": "3"
+      },
+      "master_resources": {
+        "pid": 75334,
+        "state": "S (sleeping)",
+        "rss_kib": 27360,
+        "high_water_rss_kib": 27360,
+        "threads": 10,
+        "open_fds": 22
+      },
+      "duration_seconds": 2.191
+    },
+    {
+      "name": "paused_replica_send_timeout",
+      "status": "passed",
+      "replica_stopped_resources": {
+        "pid": 75479,
+        "state": "T (stopped)",
+        "rss_kib": 27352,
+        "high_water_rss_kib": 27352,
+        "threads": 10,
+        "open_fds": 25
+      },
+      "payload_keys_written": 128,
+      "payload_bytes_written": 33554432,
+      "write_duration_seconds": 1.8411,
+      "send_timeout_log_lines": [
+        "[2026-11-17T21:29:38.246056+08:00][E][replication.cc:245] Write error while sending batch to slave 127.0.0.1:33637: send timeout waiting for socket, sent 0 of 262219 bytes. batch_size=262219"
+      ],
+      "pause_to_observed_timeout_seconds": 1.86,
+      "master_resources_after_timeout": {
+        "pid": 75334,
+        "state": "S (sleeping)",
+        "rss_kib": 50152,
+        "high_water_rss_kib": 50152,
+        "threads": 9,
+        "open_fds": 25
+      },
+      "master_replication_after_timeout": {
+        "role": "master",
+        "connected_slaves": "0",
+        "master_repl_offset": "133"
+      },
+      "duration_seconds": 2.482
+    },
+    {
+      "name": "resume_and_verify_recovery",
+      "status": "passed",
+      "target_offset": 133,
+      "replica_info": {
+        "role": "slave",
+        "master_host": "127.0.0.1",
+        "master_port": "38053",
+        "master_link_status": "up",
+        "master_sync_unrecoverable_error": "no",
+        "master_sync_in_progress": "0",
+        "master_last_io_seconds_ago": "1",
+        "slave_repl_offset": "133",
+        "slave_priority": "100",
+        "connected_slaves": "0",
+        "master_repl_offset": "133"
+      },
+      "resume_to_data_verified_seconds": 3.5452,
+      "checked_keys_including_deleted": 131,
+      "master_resources_after_recovery": {
+        "pid": 75334,
+        "state": "S (sleeping)",
+        "rss_kib": 72392,
+        "high_water_rss_kib": 72392,
+        "threads": 10,
+        "open_fds": 23
+      },
+      "replica_resources_after_recovery": {
+        "pid": 75479,
+        "state": "S (sleeping)",
+        "rss_kib": 78032,
+        "high_water_rss_kib": 78032,
+        "threads": 10,
+        "open_fds": 30
+      },
+      "duration_seconds": 3.547
+    },
+    {
+      "name": "replication_continues_after_recovery",
+      "status": "passed",
+      "target_offset": 134,
+      "replica_info": {
+        "role": "slave",
+        "master_host": "127.0.0.1",
+        "master_port": "38053",
+        "master_link_status": "up",
+        "master_sync_unrecoverable_error": "no",
+        "master_sync_in_progress": "0",
+        "master_last_io_seconds_ago": "1",
+        "slave_repl_offset": "134",
+        "slave_priority": "100",
+        "connected_slaves": "0",
+        "master_repl_offset": "134"
+      },
+      "availability_samples": 68,
+      "availability_failures": 0,
+      "duration_seconds": 0.956
+    }
+  ],
+  "binary_sha256": "fb6c8ba8d6656123b2c15b0268d48a7facba92c6d9ab921512ed67ebe0fa864c",
+  "availability": {
+    "sample_count": 68,
+    "passed": 68,
+    "failed": 0,
+    "samples_file": "availability.jsonl",
+    "max_observed_probe_ms": 10.631,
+    "max_sampled_master_rss_kib": 72392,
+    "note": "One PING/GET connection per sample, including connect time; sparse observations, not a load benchmark"
+  },
+  "nodes": {
+    "master": {
+      "port": 38053,
+      "processes": [
+        {
+          "pid": 75334,
+          "log": "${RUN}/backpressure/backpressure-ac_vje7r/master/process-1.log",
+          "exit_code": 0
+        }
+      ]
+    },
+    "replica": {
+      "port": 33637,
+      "processes": [
+        {
+          "pid": 75479,
+          "log": "${RUN}/backpressure/backpressure-ac_vje7r/replica/process-1.log",
+          "exit_code": 0
+        }
+      ]
+    }
+  },
+  "finished_at_utc": "2026-11-17T13:29:44.367677+00:00"
+}

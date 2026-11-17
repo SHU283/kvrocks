@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "started_at_utc": "2026-11-17T13:28:15.671100+00:00",
+  "upstream_commit": "baa1da67f2ef94ffd62823116537ab7e95e7d5ba",
+  "build_directory": "${SOCKET_BUILD}",
+  "steps": [
+    {
+      "name": "before",
+      "exit_code": 1,
+      "expected_failure": true,
+      "status": "passed"
+    },
+    {
+      "name": "after",
+      "exit_code": 0,
+      "expected_failure": false,
+      "status": "passed"
+    }
+  ],
+  "baseline_source_sha256": "4fa1fd61122e835c0c4466eccbbdf0f3b30887bc19ee8bd12f00ae6db37e3b7f",
+  "patched_source_sha256": "e469c1928cd9b3f7fe5cf06de988f0999e90d56d65b373ee7fba5008137b3ff1",
+  "finished_at_utc": "2026-11-17T13:29:24.961207+00:00"
+}

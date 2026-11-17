@@ -1,0 +1,25 @@
+Running main() from ${BUILD}/_deps/gtest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = IOUtilSocketTest.SendWithTimeoutHonorsDeadlineOnBlockingSocket
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from IOUtilSocketTest
+[ RUN      ] IOUtilSocketTest.SendWithTimeoutHonorsDeadlineOnBlockingSocket
+${CHECKOUT}/tests/cppunit/io_util_test.cc:107: Failure
+Value of: watchdog_fired
+  Actual: true
+Expected: false
+Socket send ignored its deadline and needed watchdog cleanup
+
+${CHECKOUT}/tests/cppunit/io_util_test.cc:110: Failure
+Expected: (elapsed) < (std::chrono::seconds(1)), actual: 2000226116ns vs 1s
+
+[  FAILED  ] IOUtilSocketTest.SendWithTimeoutHonorsDeadlineOnBlockingSocket (2004 ms)
+[----------] 1 test from IOUtilSocketTest (2005 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2009 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] IOUtilSocketTest.SendWithTimeoutHonorsDeadlineOnBlockingSocket
+
+ 1 FAILED TEST

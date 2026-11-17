@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "started_at_utc": "2026-11-17T13:29:25.641763+00:00",
+  "status": "passed",
+  "binary": "${BUILD}/kvrocks",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "run_directory": "${RUN}/replication/replication-1eizcafm",
+  "keys_per_batch": 100,
+  "configuration": {
+    "wal_sync": true,
+    "replication": "asynchronous",
+    "workers_per_node": 2
+  },
+  "scope": "Loopback process-crash recovery; not power-loss, failover, or linearizability testing",
+  "steps": [
+    {
+      "name": "master_start_and_read_write",
+      "status": "passed",
+      "duration_seconds": 1.857
+    },
+    {
+      "name": "initial_replication",
+      "status": "passed",
+      "target_offset": 100,
+      "replica_info": {
+        "role": "slave",
+        "master_host": "127.0.0.1",
+        "master_port": "35121",
+        "master_link_status": "up",
+        "master_sync_unrecoverable_error": "no",
+        "master_sync_in_progress": "0",
+        "master_last_io_seconds_ago": "0",
+        "slave_repl_offset": "100",
+        "slave_priority": "100",
+        "connected_slaves": "0",
+        "master_repl_offset": "100"
+      },
+      "duration_seconds": 1.596
+    },
+    {
+      "name": "replica_crash_and_catch_up",
+      "status": "passed",
+      "target_offset": 202,
+      "replica_info": {
+        "role": "slave",
+        "master_host": "127.0.0.1",
+        "master_port": "35121",
+        "master_link_status": "up",
+        "master_sync_unrecoverable_error": "no",
+        "master_sync_in_progress": "0",
+        "master_last_io_seconds_ago": "0",
+        "slave_repl_offset": "202",
+        "slave_priority": "100",
+        "connected_slaves": "0",
+        "master_repl_offset": "202"
+      },
+      "duration_seconds": 1.658
+    },
+    {
+      "name": "master_crash_and_persistence",
+      "status": "passed",
+      "duration_seconds": 0.582
+    },
+    {
+      "name": "replication_after_master_restart",
+      "status": "passed",
+      "target_offset": 302,
+      "replica_info": {
+        "role": "slave",
+        "master_host": "127.0.0.1",
+        "master_port": "35121",
+        "master_link_status": "up",
+        "master_sync_unrecoverable_error": "no",
+        "master_sync_in_progress": "0",
+        "master_last_io_seconds_ago": "0",
+        "slave_repl_offset": "302",
+        "slave_priority": "100",
+        "connected_slaves": "0",
+        "master_repl_offset": "302"
+      },
+      "checked_keys_including_deleted": 300,
+      "duration_seconds": 1.177
+    }
+  ],
+  "binary_sha256": "fb6c8ba8d6656123b2c15b0268d48a7facba92c6d9ab921512ed67ebe0fa864c",
+  "nodes": {
+    "master": {
+      "port": 35121,
+      "processes": [
+        {
+          "pid": 74775,
+          "log": "${RUN}/replication/replication-1eizcafm/master/process-1.log",
+          "exit_code": -9
+        },
+        {
+          "pid": 75198,
+          "log": "${RUN}/replication/replication-1eizcafm/master/process-2.log",
+          "exit_code": 0
+        }
+      ]
+    },
+    "replica": {
+      "port": 37745,
+      "processes": [
+        {
+          "pid": 74920,
+          "log": "${RUN}/replication/replication-1eizcafm/replica/process-1.log",
+          "exit_code": -9
+        },
+        {
+          "pid": 75067,
+          "log": "${RUN}/replication/replication-1eizcafm/replica/process-2.log",
+          "exit_code": 0
+        }
+      ]
+    }
+  },
+  "finished_at_utc": "2026-11-17T13:29:33.396715+00:00"
+}

@@ -1,0 +1,19 @@
+EXCERPT: Four added socket tests and the complete suite totals.
+Unrelated passing test output is omitted; source paths are redacted.
+
+[==========] Running 681 tests from 87 test suites.
+[----------] 4 tests from IOUtilSocketTest
+[ RUN      ] IOUtilSocketTest.SendWithTimeoutHonorsDeadlineOnBlockingSocket
+[       OK ] IOUtilSocketTest.SendWithTimeoutHonorsDeadlineOnBlockingSocket (101 ms)
+[ RUN      ] IOUtilSocketTest.SendWithTimeoutSendsDataAndPreservesSocketFlags
+[       OK ] IOUtilSocketTest.SendWithTimeoutSendsDataAndPreservesSocketFlags (0 ms)
+[ RUN      ] IOUtilSocketTest.SendWithTimeoutKeepsDeadlineAfterInterruptedPoll
+[       OK ] IOUtilSocketTest.SendWithTimeoutKeepsDeadlineAfterInterruptedPoll (202 ms)
+[ RUN      ] IOUtilSocketTest.SendWithTimeoutCompletesPartialWritesToSlowReader
+[       OK ] IOUtilSocketTest.SendWithTimeoutCompletesPartialWritesToSlowReader (174 ms)
+[----------] 4 tests from IOUtilSocketTest (485 ms total)
+[  SKIPPED ] UseBitmap/RedisBitmapTest.BitfieldStringGetSetTest/0 (237 ms)
+[==========] 681 tests from 87 test suites ran. (141284 ms total)
+[  PASSED  ] 680 tests.
+[  SKIPPED ] 1 test, listed below:
+[  SKIPPED ] UseBitmap/RedisBitmapTest.BitfieldStringGetSetTest/0

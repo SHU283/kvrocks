@@ -1,3 +1,68 @@
+# Kvrocks Socket Reliability and Replication Recovery
+
+A focused C++/Linux reliability project built on Apache Kvrocks. This branch fixes a blocking socket send path, adds real-socket regression tests, and provides repeatable replication fault experiments. Apache Kvrocks supplies the database, storage integration, protocol handling, and replication system; this is not a new database implementation.
+
+The analysis and patch are based on upstream commit [`baa1da67f2ef94ffd62823116537ab7e95e7d5ba`](https://github.com/apache/kvrocks/commit/baa1da67f2ef94ffd62823116537ab7e95e7d5ba). No upstream pull request has been submitted for this patch.
+
+## What I Fixed
+
+`SockSendWithTimeout` waited for writability with `poll`, then called blocking `write` on a replication socket. A writable notification does not guarantee that a large blocking write will finish before the deadline. A peer that stops reading can keep the thread inside `write`, bypassing the outer timeout check.
+
+The patch also retries `poll` and `send` when interrupted by a signal (`EINTR`). See the [bug analysis and exact production diff](docs/reliability/socket-timeout.md).
+
+## How I Fixed It
+
+- Use `send(..., MSG_DONTWAIT)` for each send in the positive-timeout, non-TLS path.
+- Retry interrupted waits and sends without resetting the original time budget.
+- Preserve the file descriptor's existing `O_NONBLOCK` setting.
+
+The `steady_clock` deadline, partial-write offset tracking, and `EAGAIN` handling already existed upstream. This patch preserves those mechanisms and closes the blocking-call and interruption gaps. [Design decisions](docs/reliability/design.md) explain the scope and tradeoffs.
+
+## How I Tested It
+
+- **Four new GoogleTest cases:** blocked sender timeout, binary data and descriptor flags, repeated signal interruption, and partial writes to a slow reader.
+- **Before/after control:** the original implementation must fail with the specific watchdog diagnostic; the patched implementation must pass the socket tests.
+- **Five replication stages:** initial writes, initial replication, replica crash and catch-up, master crash and persistence, and replication after master restart.
+- **Four backpressure stages:** initial synchronization, `SIGSTOP` plus a bounded 32 MiB write workload and observed send timeout, `SIGCONT` plus data verification, and continued replication.
+
+The Linux/WSL revalidation on **2026-11-17** recorded **680 passed, 1 skipped, 0 failed** across 681 C++ tests in 87 suites. The original implementation failed the designated timeout regression as expected; the patched control passed all five focused cases. All nine real-node experiment stages passed. The full suite includes upstream tests; only four socket cases were added here.
+
+This revalidation reused the existing server and unit-test build; it was **not a fresh full build**. The control separately compiled the original and patched socket implementation. See the [validation notes](docs/reliability/evidence.md) and [sanitized validation record](examples/reliability/validation.json) for the run identity, skipped test, and scope. These observations describe one recorded environment.
+
+The recorded real-replication timeout reported `sent 0`. It demonstrates timeout handling and recovery, but does not independently prove that the original implementation would block inside `write` in that same experiment. The direct old-versus-patched regression is provided by the local socket control test.
+
+## How to Reproduce
+
+Use Linux or WSL2. The development baseline is Ubuntu 24.04, a C++20 compiler, CMake, Ninja, and Python 3.11 or newer. The Python experiments use only the standard library.
+
+```bash
+sudo apt-get install build-essential cmake ninja-build python3 git autoconf automake libtool pkg-config
+python3 x.py build --ninja --unittest -j4
+
+# Complete C++ suite, before/after control, and both replication experiments.
+python3 tools/reliability/run.py --build-dir build
+
+# Run only the focused socket tests.
+python3 x.py test cpp build --gtest_filter='IOUtil.*:IOUtilSocketTest.*'
+```
+
+The build downloads the dependencies pinned by upstream. Experiment nodes bind to loopback, use isolated data directories, and are cleaned up after each run. The runner verifies and uses an existing build, then writes local results beneath `artifacts/reliability/`; generated binaries, caches, and database files are excluded from version control. See [reproduction commands](docs/reliability/reproduction.md) and [experiment design](docs/reliability/design.md).
+
+## My Contributions
+
+| Area | Review entry point | Scope |
+|---|---|---|
+| Production C++ | [`src/common/io_util.cc`](src/common/io_util.cc), `SockSendWithTimeout` | Per-call nonblocking send and `EINTR` retry |
+| C++ regression tests | [`tests/cppunit/io_util_test.cc`](tests/cppunit/io_util_test.cc) | Four real-socket cases with bounded cleanup |
+| Fault experiments | [`tools/reliability/run_replication_lab.py`](tools/reliability/run_replication_lab.py), [`run_backpressure_lab.py`](tools/reliability/run_backpressure_lab.py) | Data, deletion, offset, timeout-log, and recovery checks |
+| Reproduction and evidence | [`tools/reliability/run.py`](tools/reliability/run.py), [`reproduce_socket.py`](tools/reliability/reproduce_socket.py) | Executable checks, before/after control, and retained results |
+
+The [contribution map](docs/reliability/contributions.md) distinguishes upstream mechanisms from this branch's changes and provides review commands. Validation is limited to Linux non-TLS socket behavior, asynchronous replication, and process failures. It does not establish power-loss durability, automatic failover, linearizability, or throughput improvements. Go integration tests, TLS, and other operating systems are outside the recorded validation scope.
+
+---
+
+The original Apache Kvrocks README follows below. Upstream copyright, `LICENSE`, and `NOTICE` are retained.
+
 <!--
  Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements.  See the NOTICE file
