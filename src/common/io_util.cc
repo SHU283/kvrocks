@@ -497,11 +497,13 @@ Status SockSendWithTimeout(int fd, const std::string &data, int timeout_ms) {
       return {Status::NotOK, fmt::format("send timeout waiting for socket, sent {} of {} bytes", n, data.size())};
     }
     if (ready < 0) {
+      if (errno == EINTR) continue;
       return Status::FromErrno("poll error while sending");
     }
 
-    ssize_t nwritten = write(fd, data.data() + n, data.size() - n);
+    ssize_t nwritten = send(fd, data.data() + n, data.size() - n, MSG_DONTWAIT);
     if (nwritten == -1) {
+      if (errno == EINTR) continue;
       if (errno == EAGAIN || errno == EWOULDBLOCK) {
         // Socket buffer is full, continue waiting
         continue;
