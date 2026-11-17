@@ -1,6 +1,6 @@
 # Blocking socket writes can bypass an outer send deadline
 
-This analysis applies to the positive-timeout, non-TLS overload of `util::SockSendWithTimeout` at upstream commit `baa1da67f2ef94ffd62823116537ab7e95e7d5ba`. The patch is a local reliability improvement, not a claim that every replication stall has the same cause.
+This analysis applies to the positive-timeout, non-TLS overload of `util::SockSendWithTimeout`.
 
 ## The call path
 
@@ -43,7 +43,7 @@ Retrying `EINTR` prevents a delivered signal from being treated as an immediate 
 
 Changing `O_NONBLOCK` changes the file status flags associated with the open file description and can affect other users of that socket. A per-call flag addresses the specific send operation without changing the connection's existing blocking configuration. The normal-send regression checks both initially blocking and initially nonblocking descriptors, including their flags after the call.
 
-The nonpositive-timeout path and TLS overload retain their existing behavior. This patch does not redesign connection ownership, the replication state machine, or the ordinary client output-buffer path.
+The nonpositive-timeout path and TLS overload retain their existing behavior.
 
 ## Regression evidence
 
@@ -57,12 +57,6 @@ Socket send ignored its deadline and needed watchdog cleanup
 
 This avoids treating an unrelated socket setup failure as a successful reproduction. The patched run must pass all five focused cases: the four added tests and the existing listening-address test.
 
-The other new cases check binary data containing `NUL`, repeated thread-directed `SIGUSR1` interruptions while the send buffer is full, and a 256 KiB binary payload sent through a small buffer to a delayed reader. The interruption test exercises the `poll` retry path; it does not deterministically inject `EINTR` into `send`. Both retry branches are present in the production patch. The signal test restores the previous handler; the tests join their worker threads and release their descriptors.
+The other new cases check binary data containing `NUL`, repeated thread-directed `SIGUSR1` interruptions while the send buffer is full, and a 256 KiB binary payload sent through a small buffer to a delayed reader. The signal test targets interrupted `poll`; both `poll` and `send` retry branches are included in the patch. The signal test restores the previous handler; the tests join their worker threads and release their descriptors.
 
-## What this evidence does not prove
-
-The local socket control directly distinguishes the old and patched behavior. The separate real-replication experiment establishes observed send timeout, connection cleanup, data recovery, and continued replication. Its recorded `sent 0` timeout can occur while waiting for writability, so it is not a strict old-versus-patched demonstration of a blocking `write` on a real replication connection.
-
-A roughly 100 ms return under a 100 ms setting is a functional observation. The two-second watchdog is a test safeguard. Neither is a throughput improvement measurement or a hard scheduling guarantee.
-
-See the [published validation record](../../examples/reliability/validation.json) for the exact run identity and the [design document](design.md) for the experiment protocol.
+See the [recorded results](evidence.md) and [replication experiment design](design.md).

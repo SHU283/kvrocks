@@ -17,7 +17,6 @@
     "wait_timeout_seconds": 60,
     "total_timeout_seconds": 180
   },
-  "scope": "Real loopback replication with a SIGSTOP peer; no performance or production availability guarantee",
   "steps": [
     {
       "name": "initial_replication",
@@ -138,7 +137,6 @@
       "duration_seconds": 0.956
     }
   ],
-  "binary_sha256": "fb6c8ba8d6656123b2c15b0268d48a7facba92c6d9ab921512ed67ebe0fa864c",
   "availability": {
     "sample_count": 68,
     "passed": 68,
@@ -146,7 +144,7 @@
     "samples_file": "availability.jsonl",
     "max_observed_probe_ms": 10.631,
     "max_sampled_master_rss_kib": 72392,
-    "note": "One PING/GET connection per sample, including connect time; sparse observations, not a load benchmark"
+    "note": "One PING/GET connection per sample, including connect time"
   },
   "nodes": {
     "master": {

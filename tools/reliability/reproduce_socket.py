@@ -24,7 +24,8 @@ import subprocess
 import tempfile
 import sys
 
-from build_identity import UPSTREAM_SHA, sha256
+# Baseline implementation used by the before/after regression control.
+UPSTREAM_SHA = "baa1da67f2ef94ffd62823116537ab7e95e7d5ba"
 
 
 def run_command(command, output, timeout):
@@ -66,9 +67,7 @@ def main():
     baseline_file = scratch / "io_util_before.cc"
     baseline_file.write_bytes(baseline)
     report = {"status": "running", "started_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-              "upstream_commit": UPSTREAM_SHA, "build_directory": str(scratch), "steps": [],
-              "baseline_source_sha256": sha256(baseline_file),
-              "patched_source_sha256": sha256(source / "src/common/io_util.cc")}
+              "build_directory": str(scratch), "steps": []}
     try:
         for name, implementation in (("before", baseline_file), ("after", source / "src/common/io_util.cc")):
             build_dir = scratch / name

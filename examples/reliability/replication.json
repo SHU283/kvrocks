@@ -11,7 +11,6 @@
     "replication": "asynchronous",
     "workers_per_node": 2
   },
-  "scope": "Loopback process-crash recovery; not power-loss, failover, or linearizability testing",
   "steps": [
     {
       "name": "master_start_and_read_write",
@@ -82,7 +81,6 @@
       "duration_seconds": 1.177
     }
   ],
-  "binary_sha256": "fb6c8ba8d6656123b2c15b0268d48a7facba92c6d9ab921512ed67ebe0fa864c",
   "nodes": {
     "master": {
       "port": 35121,

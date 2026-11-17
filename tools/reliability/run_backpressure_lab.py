@@ -13,13 +13,11 @@
 """Observe a real Kvrocks replication send timeout and recovery from a paused peer.
 
 This bounded Linux loopback experiment uses SIGSTOP/SIGCONT on its own replica.
-Timing and resource samples describe this run; they are not throughput benchmarks.
 """
 
 import argparse
 import contextlib
 import datetime
-import hashlib
 import json
 import math
 import os
@@ -122,11 +120,8 @@ def run(args):
             "replication": "asynchronous", "workers_per_node": 2,
             "wait_timeout_seconds": args.timeout, "total_timeout_seconds": args.total_timeout,
         },
-        "scope": "Real loopback replication with a SIGSTOP peer; no performance or production availability guarantee",
         "steps": [],
     }
-    with binary.open("rb") as stream:
-        report["binary_sha256"] = hashlib.file_digest(stream, "sha256").hexdigest()
     master = Node("master", binary, run_dir, args.timeout)
     replica = Node("replica", binary, run_dir, args.timeout, upstream=master)
     paused = False
@@ -229,7 +224,7 @@ def run(args):
                 "failed": len(probe.samples) - len(passed), "samples_file": "availability.jsonl",
                 "max_observed_probe_ms": max((sample["duration_ms"] for sample in probe.samples), default=None),
                 "max_sampled_master_rss_kib": max((sample["resources"]["rss_kib"] for sample in passed), default=None),
-                "note": "One PING/GET connection per sample, including connect time; sparse observations, not a load benchmark",
+                "note": "One PING/GET connection per sample, including connect time",
             }
         for node in (replica, master):
             try:

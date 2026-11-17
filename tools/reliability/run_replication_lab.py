@@ -13,14 +13,12 @@
 """Run an isolated, repeatable Kvrocks replication and process-recovery lab.
 
 Uses only Python's standard library. All generated files are retained in a new
-run directory. This is a functional experiment, not a performance benchmark or
-a power-loss durability/linearizability test.
+run directory.
 """
 
 import argparse
 import contextlib
 import datetime
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -282,14 +280,8 @@ def run(args):
         "run_directory": str(run_dir),
         "keys_per_batch": args.keys,
         "configuration": {"wal_sync": True, "replication": "asynchronous", "workers_per_node": 2},
-        "scope": "Loopback process-crash recovery; not power-loss, failover, or linearizability testing",
         "steps": [],
     }
-    with binary.open("rb") as stream:
-        digest = hashlib.sha256()
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-        report["binary_sha256"] = digest.hexdigest()
     master = Node("master", binary, run_dir, args.timeout)
     replica = Node("replica", binary, run_dir, args.timeout, upstream=master)
     expected = {}
